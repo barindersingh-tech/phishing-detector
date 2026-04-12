@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Phishing Detector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>🤖 AI Phishing Detector</h1>
+        <p class="subtitle">Smart URL Security Analyzer</p>
+
+        <input type="text" id="urlInput" placeholder="Enter website URL...">
+
+        <button onclick="checkURL()">Analyze</button>
+
+        <div id="loader" class="hidden"></div>
+
+        <!-- Result Section -->
+        <div id="resultBox" class="hidden">
+            <p id="resultText"></p>
+            <p id="confidence"></p>
+            <ul id="reasons"></ul>
+        </div>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
