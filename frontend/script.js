@@ -1,19 +1,12 @@
-// ✅ GLOBAL CHART VARIABLES
-let pieChart = null;
-let barChart = null;
-
-
-// 🔥 LOAD HISTORY FUNCTION
+// 🔥 LOAD HISTORY FUNCTION (OUTSIDE)
 async function loadHistory() {
     const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
     const data = await response.json();
 
-    renderCharts(data); // ✅ charts update
-
     const list = document.getElementById("historyList");
     list.innerHTML = "";
 
-    data.reverse().forEach(item => {
+    data.forEach(item => {
         const li = document.createElement("li");
 
         let badge = item[2] === "Phishing"
@@ -35,12 +28,9 @@ async function loadHistory() {
 // 🔥 MAIN FUNCTION
 async function checkURL() {
     let url = document.getElementById("urlInput").value;
-
-    // ✅ FIX URL
     if (!url.startsWith("http")) {
-        url = "https://" + url;
-    }
-
+    url = "https://" + url;
+}
     let loader = document.getElementById("loader");
     let resultBox = document.getElementById("resultBox");
     let resultText = document.getElementById("resultText");
@@ -79,7 +69,6 @@ async function checkURL() {
             resultText.style.color = "#00ff99";
             resultBox.style.background = "rgba(0,255,0,0.15)";
         }
-
         // ✅ CONFIDENCE
         confidenceText.innerHTML = "Confidence: " + (data.confidence || 90) + "%";
 
@@ -93,7 +82,7 @@ async function checkURL() {
             });
         }
 
-        // 🔥 REFRESH HISTORY + CHARTS
+        // 🔥 UPDATE HISTORY AFTER CHECK
         loadHistory();
 
     } catch (error) {
@@ -102,8 +91,6 @@ async function checkURL() {
     }
 }
 
-
-// 🔥 CHART FUNCTION (FIXED)
 function renderCharts(data) {
     let phishing = 0;
     let legit = 0;
@@ -113,12 +100,8 @@ function renderCharts(data) {
         else legit++;
     });
 
-    // ✅ DESTROY OLD CHARTS FIRST
-    if (pieChart) pieChart.destroy();
-    if (barChart) barChart.destroy();
-
     // PIE CHART
-    pieChart = new Chart(document.getElementById("pieChart"), {
+    new Chart(document.getElementById("pieChart"), {
         type: 'pie',
         data: {
             labels: ['Phishing', 'Legitimate'],
@@ -130,7 +113,7 @@ function renderCharts(data) {
     });
 
     // BAR CHART
-    barChart = new Chart(document.getElementById("barChart"), {
+    new Chart(document.getElementById("barChart"), {
         type: 'bar',
         data: {
             labels: ['Phishing', 'Legitimate'],
@@ -143,6 +126,5 @@ function renderCharts(data) {
     });
 }
 
-
-// 🔥 LOAD ON START
+// 🔥 LOAD HISTORY ON PAGE LOAD
 window.onload = loadHistory;

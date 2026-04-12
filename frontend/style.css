@@ -150,8 +150,3 @@ button:hover {
     justify-content: space-between;
     align-items: center;
 }
-.chart-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 20px auto;
-}
