@@ -2,6 +2,7 @@
 async function loadHistory() {
     const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
     const data = await response.json();
+    renderCharts(data); // ✅ ADD THIS LINE
 
     const list = document.getElementById("historyList");
     list.innerHTML = "";
@@ -91,6 +92,40 @@ async function checkURL() {
     }
 }
 
+function renderCharts(data) {
+    let phishing = 0;
+    let legit = 0;
+
+    data.forEach(item => {
+        if (item[2] === "Phishing") phishing++;
+        else legit++;
+    });
+
+    // PIE CHART
+    new Chart(document.getElementById("pieChart"), {
+        type: 'pie',
+        data: {
+            labels: ['Phishing', 'Legitimate'],
+            datasets: [{
+                data: [phishing, legit],
+                backgroundColor: ['#ff4d4d', '#00cc66']
+            }]
+        }
+    });
+
+    // BAR CHART
+    new Chart(document.getElementById("barChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Phishing', 'Legitimate'],
+            datasets: [{
+                label: 'Count',
+                data: [phishing, legit],
+                backgroundColor: ['#ff4d4d', '#00cc66']
+            }]
+        }
+    });
+}
 
 // 🔥 LOAD HISTORY ON PAGE LOAD
 window.onload = loadHistory;
