@@ -53,12 +53,11 @@ async function checkURL() {
         // ✅ RESULT
         if (data.result === "Phishing") {
             resultText.innerHTML = "⚠️ Phishing Website";
-            resultBox.style.borderLeft = "5px solid red";
+            resultBox.style.background = "rgba(255,0,0,0.2)";
         } else {
             resultText.innerHTML = "✅ Legitimate Website";
-            resultBox.style.borderLeft = "5px solid green";
+            resultBox.style.background = "rgba(0,255,0,0.2)";
         }
-
         // ✅ CONFIDENCE
         confidenceText.innerHTML = "Confidence: " + (data.confidence || 90) + "%";
 

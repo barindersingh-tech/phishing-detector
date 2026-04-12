@@ -8,26 +8,37 @@
 <body>
 
 <div class="container">
+
     <div class="card">
 
+        <!-- Header -->
         <h1>🤖 AI Phishing Detector</h1>
         <p class="subtitle">Smart URL Security Analyzer</p>
 
-        <input type="text" id="urlInput" placeholder="Enter website URL...">
+        <!-- Input -->
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Enter URL (https://example.com)">
+            <button onclick="checkURL()">Analyze</button>
+        </div>
 
-        <button onclick="checkURL()">Analyze</button>
+        <!-- Loader -->
+        <div id="loader" class="loader hidden"></div>
 
-        <div id="loader" class="hidden"></div>
-
-        <!-- Result Section -->
-        <div id="resultBox" class="hidden">
-            <p id="resultText"></p>
+        <!-- Result -->
+        <div id="resultBox" class="result hidden">
+            <h2 id="resultText"></h2>
             <p id="confidence"></p>
             <ul id="reasons"></ul>
         </div>
-        <h3>History</h3>
-        <ul id="historyList"></ul>
+
+        <!-- History -->
+        <div class="history-section">
+            <h3>📜 History</h3>
+            <ul id="historyList"></ul>
+        </div>
+
     </div>
+
 </div>
 
 <script src="script.js"></script>
