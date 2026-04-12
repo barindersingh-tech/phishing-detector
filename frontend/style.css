@@ -128,3 +128,25 @@ button:hover {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge.red {
+    background: #ff4d4d;
+    color: white;
+}
+
+.badge.green {
+    background: #00cc66;
+    color: white;
+}
+
+.history-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

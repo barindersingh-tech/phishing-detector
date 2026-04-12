@@ -1,27 +1,36 @@
 // 🔥 LOAD HISTORY FUNCTION (OUTSIDE)
 async function loadHistory() {
-    try {
-        const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
-        const data = await response.json();
+    const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
+    const data = await response.json();
 
-        const list = document.getElementById("historyList");
-        list.innerHTML = "";
+    const list = document.getElementById("historyList");
+    list.innerHTML = "";
 
-        data.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item[1] + " → " + item[2];
-            list.appendChild(li);
-        });
+    data.forEach(item => {
+        const li = document.createElement("li");
 
-    } catch (error) {
-        console.log("History load error");
-    }
+        let badge = item[2] === "Phishing"
+            ? `<span class="badge red">Phishing</span>`
+            : `<span class="badge green">Legitimate</span>`;
+
+        li.innerHTML = `
+            <div class="history-card">
+                <p>${item[1]}</p>
+                ${badge}
+            </div>
+        `;
+
+        list.appendChild(li);
+    });
 }
 
 
 // 🔥 MAIN FUNCTION
 async function checkURL() {
     let url = document.getElementById("urlInput").value;
+    if (!url.startsWith("http")) {
+    url = "https://" + url;
+}
     let loader = document.getElementById("loader");
     let resultBox = document.getElementById("resultBox");
     let resultText = document.getElementById("resultText");
@@ -53,10 +62,12 @@ async function checkURL() {
         // ✅ RESULT
         if (data.result === "Phishing") {
             resultText.innerHTML = "⚠️ Phishing Website";
-            resultBox.style.background = "rgba(255,0,0,0.2)";
+            resultText.style.color = "#ff4d4d";
+            resultBox.style.background = "rgba(255,0,0,0.15)";
         } else {
             resultText.innerHTML = "✅ Legitimate Website";
-            resultBox.style.background = "rgba(0,255,0,0.2)";
+            resultText.style.color = "#00ff99";
+            resultBox.style.background = "rgba(0,255,0,0.15)";
         }
         // ✅ CONFIDENCE
         confidenceText.innerHTML = "Confidence: " + (data.confidence || 90) + "%";
