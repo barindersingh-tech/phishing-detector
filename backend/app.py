@@ -35,13 +35,13 @@ def predict():
     score = 0
     reasons = []
 
-    # 🔴 Rule 1: Invalid URL
+    # Rule 1: Invalid URL
     if not parsed.scheme or not parsed.netloc:
         result = "Phishing"
         confidence = 95
-        reasons.append("Invalid URL format")
+        reasons = ["Invalid URL format"]
 
-        insert_data(url, result)  # ✅ SAVE
+        insert_data(url, result)
 
         return jsonify({
             "result": result,
@@ -49,41 +49,58 @@ def predict():
             "reasons": reasons
         })
 
-    # 🔴 Rule 2: No HTTPS
+    # Rule 2: No HTTPS
     if not url.startswith("https://"):
         score += 3
         reasons.append("No HTTPS encryption")
 
-    # 🔴 Rule 3: Suspicious keywords
+    # Rule 3: Suspicious keywords
     suspicious_words = ["login", "verify", "bank", "secure", "account"]
     if any(word in url.lower() for word in suspicious_words):
         score += 3
         reasons.append("Contains suspicious keywords")
 
-    # 🔴 Rule 4: IP address
+    # Rule 4: IP address
     if re.match(r"\d+\.\d+\.\d+\.\d+", domain):
         score += 3
         reasons.append("Uses IP address instead of domain")
 
-    # 🔴 Rule 5: Hyphen
+    # Rule 5: Hyphen
     if "-" in domain:
         score += 2
         reasons.append("Hyphen in domain")
 
-    # 🔴 Rule 6: Long URL
+    # Rule 6: Long URL
     if len(url) > 75:
         score += 2
         reasons.append("Long URL")
 
-    # 🔴 Rule 7: Suspicious TLD
+    # Rule 7: Suspicious TLD
     if domain.endswith((".xyz", ".tk", ".ml", ".ga")):
         score += 3
         reasons.append("Suspicious domain extension")
 
-    # 🔴 Rule 8: Random string domain
+    # Rule 8: Random domain
     if re.match(r"^[a-z0-9]{10,}$", domain.replace(".", "")):
         score += 3
         reasons.append("Random-looking domain")
+
+    # Final result
+    if score >= 5:
+        result = "Phishing"
+        confidence = min(90 + score, 99)
+    else:
+        result = "Legitimate"
+        confidence = 70 + (5 - score) * 5
+
+    # ✅ SAVE AFTER RESULT IS CALCULATED
+    insert_data(url, result)
+
+    return jsonify({
+        "result": result,
+        "confidence": confidence,
+        "reasons": reasons
+    })
 
     # 🎯 FINAL RESULT
     if score >= 5:
