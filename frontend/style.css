@@ -91,6 +91,22 @@ button:hover {
     font-size: 13px;
 }
 
+#historyList {
+    margin-top: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+#historyList li {
+    list-style: none;
+    padding: 8px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
 #reasons li {
     margin-bottom: 5px;
 }

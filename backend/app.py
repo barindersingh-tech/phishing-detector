@@ -3,14 +3,27 @@ from flask_cors import CORS
 import re
 from urllib.parse import urlparse
 import os
+from database import init_db, insert_data, get_history
 
 app = Flask(__name__)
 CORS(app)
+
+init_db()
+
 
 @app.route("/")
 def home():
     return "AI Phishing Detection API Running"
 
+
+# ✅ HISTORY API
+@app.route('/history', methods=['GET'])
+def history():
+    data = get_history()
+    return jsonify(data)
+
+
+# ✅ PREDICT API
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
@@ -24,10 +37,16 @@ def predict():
 
     # 🔴 Rule 1: Invalid URL
     if not parsed.scheme or not parsed.netloc:
+        result = "Phishing"
+        confidence = 95
+        reasons.append("Invalid URL format")
+
+        insert_data(url, result)  # ✅ SAVE
+
         return jsonify({
-            "result": "Phishing",
-            "confidence": 95,
-            "reasons": ["Invalid URL format"]
+            "result": result,
+            "confidence": confidence,
+            "reasons": reasons
         })
 
     # 🔴 Rule 2: No HTTPS
@@ -74,13 +93,16 @@ def predict():
         result = "Legitimate"
         confidence = 70 + (5 - score) * 5
 
+    # ✅ SAVE TO DATABASE (AFTER result defined)
+    insert_data(url, result)
+
     return jsonify({
         "result": result,
         "confidence": confidence,
         "reasons": reasons
     })
 
-if __name__ == "__main__":
 
- port = int(os.environ.get("PORT", 5000))
- app.run(host="0.0.0.0", port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
