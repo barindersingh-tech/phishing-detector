@@ -106,37 +106,27 @@ def predict():
     if score >= 5:
         result = "Phishing"
         confidence = min(90 + score, 99)
+        risk_level = "High"
     else:
         result = "Legitimate"
         confidence = 70 + (5 - score) * 5
-
-# ✅ RISK SCORE (0–100)
-    risk_score = min(score * 15, 100)
-
-# ✅ RISK LEVEL
-    if risk_score > 70:
-        risk_level = "High"
-    elif risk_score > 40:
-        risk_level = "Medium"
-    else:
         risk_level = "Low"
 
-# ✅ EXPLANATION
-    if result == "Phishing":
-        explanation = "This website shows multiple phishing indicators such as " + ", ".join(reasons)
-    else:
-        explanation = "This website appears safe with no major phishing indicators."
+# 🔥 ADD THIS
+    risk_score = min(score * 10, 100)
 
-# SAVE DATA
+    explanation = ", ".join(reasons) if reasons else "Safe URL"
+
+# ✅ INSERT INTO DB AFTER RESULT
     insert_data(url, result)
 
     return jsonify({
-        "result": result,
-        "confidence": confidence,
-        "risk_score": risk_score,
-        "risk_level": risk_level,
-        "explanation": explanation,
-        "reasons": reasons
+    "result": result,
+    "confidence": confidence,
+    "reasons": reasons,
+    "risk_score": risk_score,
+    "risk_level": risk_level,
+    "explanation": explanation
 })
 
 
