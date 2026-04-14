@@ -150,3 +150,43 @@ button:hover {
     justify-content: space-between;
     align-items: center;
 }
+/* Theme button */
+.theme-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ffffff33;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Light Mode */
+body.light {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    color: black;
+}
+
+body.light .card {
+    background: rgba(255,255,255,0.8);
+    color: black;
+}
+
+body.light input {
+    background: white;
+    color: black;
+}
+
+body.light #historyList li {
+    background: rgba(0,0,0,0.05);
+}
+
+/* Smooth transition */
+body, .card {
+    transition: all 0.4s ease;
+}
+.card {
+    position: relative;
+}
