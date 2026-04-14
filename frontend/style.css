@@ -72,7 +72,7 @@ button:hover {
 
 /* Loader */
 .loader {
-    border: 4px solid #fff;
+    border: 4px solid rgba(255,255,255,0.2);
     border-top: 4px solid #00c6ff;
     border-radius: 50%;
     width: 40px;
@@ -189,4 +189,73 @@ body, .card {
 }
 .card {
     position: relative;
+}
+/* Smooth page entry */
+.card {
+    animation: slideUp 0.8s ease-in-out;
+}
+
+/* Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ripple effect */
+button::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,0.4);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+}
+
+button:active::after {
+    width: 200px;
+    height: 200px;
+}
+input:focus {
+    box-shadow: 0 0 10px #00c6ff;
+    transform: scale(1.02);
+}
+.result {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.history-card {
+    transition: 0.3s;
+}
+
+.history-card:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.15);
+}
+.card {
+    box-shadow: 0 0 25px rgba(0, 198, 255, 0.2);
+}
+
+.card:hover {
+    box-shadow: 0 0 40px rgba(0, 198, 255, 0.4);
+}
+* {
+    transition: all 0.3s ease;
 }
