@@ -1,36 +1,44 @@
-// 🔥 LOAD HISTORY FUNCTION (OUTSIDE)
+// 🔥 LOAD HISTORY FUNCTION
 async function loadHistory() {
-    const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
-    const data = await response.json();
+    try {
+        const response = await fetch("https://phishing-detector-isr5.onrender.com/history");
+        const data = await response.json();
 
-    const list = document.getElementById("historyList");
-    list.innerHTML = "";
+        const list = document.getElementById("historyList");
+        list.innerHTML = "";
 
-    data.forEach(item => {
-        const li = document.createElement("li");
+        data.reverse().forEach(item => {
+            const li = document.createElement("li");
 
-        let badge = item[2] === "Phishing"
-            ? `<span class="badge red">Phishing</span>`
-            : `<span class="badge green">Legitimate</span>`;
+            let badge = item[2] === "Phishing"
+                ? `<span class="badge red">Phishing</span>`
+                : `<span class="badge green">Legitimate</span>`;
 
-        li.innerHTML = `
-            <div class="history-card">
-                <p>${item[1]}</p>
-                ${badge}
-            </div>
-        `;
+            li.innerHTML = `
+                <div class="history-card">
+                    <p>${item[1]}</p>
+                    ${badge}
+                </div>
+            `;
 
-        list.appendChild(li);
-    });
+            list.appendChild(li);
+        });
+
+    } catch (error) {
+        console.log("History load failed");
+    }
 }
 
 
 // 🔥 MAIN FUNCTION
 async function checkURL() {
     let url = document.getElementById("urlInput").value;
+
+    // ✅ AUTO FIX URL
     if (!url.startsWith("http")) {
-    url = "https://" + url;
-}
+        url = "https://" + url;
+    }
+
     let loader = document.getElementById("loader");
     let resultBox = document.getElementById("resultBox");
     let resultText = document.getElementById("resultText");
@@ -69,12 +77,23 @@ async function checkURL() {
             resultText.style.color = "#00ff99";
             resultBox.style.background = "rgba(0,255,0,0.15)";
         }
+
         // ✅ CONFIDENCE
         confidenceText.innerHTML = "Confidence: " + (data.confidence || 90) + "%";
 
+        // ✅ SCAN REPORT (SAFE CHECKS)
+        document.getElementById("riskScore").innerHTML =
+            "Risk Score: " + (data.risk_score ?? "N/A") + "/100";
+
+        document.getElementById("riskLevel").innerHTML =
+            "Risk Level: " + (data.risk_level ?? "N/A");
+
+        document.getElementById("explanation").innerHTML =
+            data.explanation || "No explanation available";
+
         // ✅ REASONS
         reasonsList.innerHTML = "";
-        if (data.reasons) {
+        if (data.reasons && data.reasons.length > 0) {
             data.reasons.forEach(reason => {
                 let li = document.createElement("li");
                 li.textContent = reason;
@@ -82,7 +101,7 @@ async function checkURL() {
             });
         }
 
-        // 🔥 UPDATE HISTORY AFTER CHECK
+        // 🔥 UPDATE HISTORY
         loadHistory();
 
     } catch (error) {
@@ -91,61 +110,32 @@ async function checkURL() {
     }
 }
 
-function renderCharts(data) {
-    let phishing = 0;
-    let legit = 0;
 
-    data.forEach(item => {
-        if (item[2] === "Phishing") phishing++;
-        else legit++;
-    });
-
-    // PIE CHART
-    new Chart(document.getElementById("pieChart"), {
-        type: 'pie',
-        data: {
-            labels: ['Phishing', 'Legitimate'],
-            datasets: [{
-                data: [phishing, legit],
-                backgroundColor: ['#ff4d4d', '#00cc66']
-            }]
-        }
-    });
-
-    // BAR CHART
-    new Chart(document.getElementById("barChart"), {
-        type: 'bar',
-        data: {
-            labels: ['Phishing', 'Legitimate'],
-            datasets: [{
-                label: 'Count',
-                data: [phishing, legit],
-                backgroundColor: ['#ff4d4d', '#00cc66']
-            }]
-        }
-    });
-}
-
-// 🔥 LOAD HISTORY ON PAGE LOAD
+// 🔥 LOAD ON PAGE START
 window.onload = loadHistory;
 
-// 🌙 THEME TOGGLE
-const toggleBtn = document.getElementById("themeToggle");
 
-// Load saved theme
-if (localStorage.getItem("theme") === "light") {
-    document.body.classList.add("light");
-    toggleBtn.innerHTML = "☀️";
-}
+// 🌙 THEME TOGGLE (SAFE VERSION)
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("themeToggle");
 
-toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("light");
+    if (!toggleBtn) return; // ✅ prevents error
 
-    if (document.body.classList.contains("light")) {
-        localStorage.setItem("theme", "light");
+    // Load saved theme
+    if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light");
         toggleBtn.innerHTML = "☀️";
-    } else {
-        localStorage.setItem("theme", "dark");
-        toggleBtn.innerHTML = "🌙";
     }
+
+    toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+
+        if (document.body.classList.contains("light")) {
+            localStorage.setItem("theme", "light");
+            toggleBtn.innerHTML = "☀️";
+        } else {
+            localStorage.setItem("theme", "dark");
+            toggleBtn.innerHTML = "🌙";
+        }
+    });
 });

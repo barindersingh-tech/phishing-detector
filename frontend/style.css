@@ -259,3 +259,12 @@ input:focus {
 * {
     transition: all 0.3s ease;
 }
+#riskLevel {
+    font-weight: bold;
+}
+
+#explanation {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.9;
+}
