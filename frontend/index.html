@@ -8,9 +8,15 @@
 <body>
 
 <div class="container">
-
     <div class="card">
 
+        <!-- Premium UI -->
+        <div class="premium-container">
+            <span id="userType" class="user-badge free">Free</span>
+            <button id="premiumBtn" class="premium-btn">💎 Upgrade</button>
+        </div>
+
+        <!-- Theme Toggle -->
         <button id="themeToggle" class="theme-btn">🌙</button>
 
         <!-- Header -->
@@ -30,9 +36,11 @@
         <div id="resultBox" class="result hidden">
             <h2 id="resultText"></h2>
             <p id="confidence"></p>
+
             <p id="riskScore"></p>
             <p id="riskLevel"></p>
             <p id="explanation"></p>
+
             <ul id="reasons"></ul>
         </div>
 
@@ -43,10 +51,8 @@
         </div>
 
     </div>
-
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
