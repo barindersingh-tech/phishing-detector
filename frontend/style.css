@@ -150,17 +150,11 @@ button:hover {
     justify-content: space-between;
     align-items: center;
 }
-/* Theme button */
 .theme-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #ffffff33;
-    border: none;
-    padding: 8px 12px;
+    background: rgba(255,255,255,0.2);
     border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
+    padding: 6px;
+    font-size: 14px;
 }
 
 /* Light Mode */
@@ -274,38 +268,39 @@ input:focus {
 .top-controls {
     position: absolute;
     top: 15px;
+    left: 15px;
     right: 15px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.right-controls {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-
 /* Premium Badge */
 .user-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.2);
     font-size: 12px;
-    font-weight: bold;
-    backdrop-filter: blur(5px);
+    padding: 6px 12px;
 }
 
-/* Premium Button (Startup Style) */
 .premium-btn {
     background: linear-gradient(135deg, #ffd700, #ff9f1c);
     border: none;
-    padding: 8px;
+    padding: 7px;
     border-radius: 50%;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0 0 10px rgba(255,215,0,0.6);
+    box-shadow: 0 0 8px rgba(255,215,0,0.5); /* softer glow */
 }
 
-/* Hover Glow */
+/* Hover only strong glow */
 .premium-btn:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 20px rgba(255,215,0,1);
+    transform: scale(1.1);
+    box-shadow: 0 0 18px rgba(255,215,0,0.9);
 }
 
 /* Premium Activated Badge */
