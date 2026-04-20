@@ -1,3 +1,7 @@
+// 🔥 PREMIUM FLAG
+let isPremium = false;
+
+
 // 🔥 LOAD HISTORY FUNCTION
 async function loadHistory() {
     try {
@@ -81,15 +85,32 @@ async function checkURL() {
         // ✅ CONFIDENCE
         confidenceText.innerHTML = "Confidence: " + (data.confidence || 90) + "%";
 
-        // ✅ SCAN REPORT (SAFE CHECKS)
-        document.getElementById("riskScore").innerHTML =
-            "Risk Score: " + (data.risk_score ?? "N/A") + "/100";
+        // 🔐 PREMIUM FEATURE CONTROL
+        if (isPremium) {
+            document.getElementById("riskScore").innerHTML =
+                "Risk Score: " + (data.risk_score ?? "N/A") + "/100";
 
-        document.getElementById("riskLevel").innerHTML =
-            "Risk Level: " + (data.risk_level ?? "N/A");
+            document.getElementById("riskLevel").innerHTML =
+                "Risk Level: " + (data.risk_level ?? "N/A");
 
-        document.getElementById("explanation").innerHTML =
-            data.explanation || "No explanation available";
+            document.getElementById("explanation").innerHTML =
+                data.explanation || "No explanation available";
+
+            // Remove blur
+            document.getElementById("riskScore").classList.remove("locked");
+            document.getElementById("riskLevel").classList.remove("locked");
+            document.getElementById("explanation").classList.remove("locked");
+
+        } else {
+            document.getElementById("riskScore").innerHTML = "🔒 Premium Feature";
+            document.getElementById("riskLevel").innerHTML = "🔒 Premium Feature";
+            document.getElementById("explanation").innerHTML = "Upgrade to unlock insights";
+
+            // Add blur
+            document.getElementById("riskScore").classList.add("locked");
+            document.getElementById("riskLevel").classList.add("locked");
+            document.getElementById("explanation").classList.add("locked");
+        }
 
         // ✅ REASONS
         reasonsList.innerHTML = "";
@@ -115,27 +136,46 @@ async function checkURL() {
 window.onload = loadHistory;
 
 
-// 🌙 THEME TOGGLE (SAFE VERSION)
+// 🌙 THEME + 💎 PREMIUM SETUP
 document.addEventListener("DOMContentLoaded", () => {
+
+    // 🌙 THEME
     const toggleBtn = document.getElementById("themeToggle");
 
-    if (!toggleBtn) return; // ✅ prevents error
+    if (toggleBtn) {
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light");
+            toggleBtn.innerHTML = "☀️";
+        }
 
-    // Load saved theme
-    if (localStorage.getItem("theme") === "light") {
-        document.body.classList.add("light");
-        toggleBtn.innerHTML = "☀️";
+        toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("light");
+
+            if (document.body.classList.contains("light")) {
+                localStorage.setItem("theme", "light");
+                toggleBtn.innerHTML = "☀️";
+            } else {
+                localStorage.setItem("theme", "dark");
+                toggleBtn.innerHTML = "🌙";
+            }
+        });
     }
 
-    toggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("light");
+    // 💎 PREMIUM
+    const premiumBtn = document.getElementById("premiumBtn");
+    const userType = document.getElementById("userType");
 
-        if (document.body.classList.contains("light")) {
-            localStorage.setItem("theme", "light");
-            toggleBtn.innerHTML = "☀️";
-        } else {
-            localStorage.setItem("theme", "dark");
-            toggleBtn.innerHTML = "🌙";
-        }
-    });
+    if (premiumBtn && userType) {
+        premiumBtn.addEventListener("click", () => {
+            isPremium = true;
+
+            userType.innerHTML = "Premium 💎";
+            userType.classList.add("premium");
+
+            premiumBtn.style.display = "none";
+
+            alert("🚀 Premium Activated!");
+        });
+    }
+
 });
